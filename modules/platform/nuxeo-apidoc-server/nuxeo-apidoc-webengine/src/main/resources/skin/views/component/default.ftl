@@ -11,6 +11,15 @@
 
 <div class="tabscontent">
 
+  <#if nxItem.requirements?size gt 0>
+    <h2>Requirements</h2>
+    <ul class="nolist">
+      <#list nxItem.requirements as req>
+      <li><a class="tag requirement" href="${Root.path}/${distId}/viewComponent/${req}">${req}</a></li>
+      </#list>
+    </ul>
+  </#if>
+
   <#if !nxItem.xmlPureComponent>
   <h2>Implementation</h2>
     <#assign componentClass=nxItem.componentClass/>
@@ -40,7 +49,6 @@
     <li><a class="tag contributions" href="${Root.path}/${distId}/viewContribution/${ex.id?url}">${ex.id}</a></li>
     </#list>
   </ul>
-
 
   <h2>XML source</h2>
   <div>

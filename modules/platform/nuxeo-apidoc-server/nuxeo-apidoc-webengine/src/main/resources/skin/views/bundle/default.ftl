@@ -9,6 +9,15 @@
 
 <div class="tabscontent">
 
+  <#if nxItem.requirements?size gt 0>
+    <h2>Requirements</h2>
+    <ul class="nolist">
+      <#list nxItem.requirements as req>
+      <li><a class="tag requirement" href="${Root.path}/${distId}/viewBundle/${req}">${req}</a></li>
+      </#list>
+    </ul>
+  </#if>
+
   <h2>Components</h2>
   <#if nxItem.components?size == 0>
     No components.
