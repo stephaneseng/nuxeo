@@ -1,0 +1,12 @@
+dependencies:
+- name: exposecontroller
+  repository: http://chartmuseum.jenkins-x.io
+  version: 2.3.111
+- name: exposecontroller
+  repository: http://chartmuseum.jenkins-x.io
+  version: 2.3.111
+- name: nuxeo
+  repository: https://chartmuseum.platform.dev.nuxeo.com
+  version: 1.0.5
+digest: sha256:66a9c62b419303146fb09fde5cf182a934c90aa0acbf8481d216ee5ea3957491
+generated: "2020-03-24T17:22:39.671073+01:00"
