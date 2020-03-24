@@ -2,14 +2,14 @@
   <parent>
     <groupId>org.nuxeo</groupId>
     <artifactId>nuxeo-addons-parent</artifactId>
-    <version>11.1-SNAPSHOT</version>
+    <version>PR-3856-11.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.nuxeo.ecm.platform</groupId>
   <artifactId>nuxeo-quota-parent</artifactId>
   <name>Nuxeo Quota</name>
   <description>Nuxeo Quota</description>
-  <version>11.1-SNAPSHOT</version>
+  <version>PR-3856-11.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <modules>
