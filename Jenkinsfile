@@ -298,6 +298,176 @@ pipeline {
       }
     }
 
+    stage('Update version') {
+      steps {
+        container('maven') {
+          echo """
+          ----------------------------------------
+          Update version
+          ----------------------------------------
+          New version: ${VERSION}
+          """
+          sh """
+            mvn ${MAVEN_ARGS} -Pdistrib,docker versions:set -DnewVersion=${VERSION} -DgenerateBackupPoms=false
+            perl -i -pe 's|<nuxeo.platform.version>.*?</nuxeo.platform.version>|<nuxeo.platform.version>${VERSION}</nuxeo.platform.version>|' pom.xml
+            perl -i -pe 's|org.nuxeo.ecm.product.version=.*|org.nuxeo.ecm.product.version=${VERSION}|' nuxeo-distribution/nuxeo-nxr-server/src/main/resources/templates/nuxeo.defaults
+          """
+        }
+      }
+    }
+
+    stage('Git commit') {
+      steps {
+        container('maven') {
+          echo """
+          ----------------------------------------
+          Git commit
+          ----------------------------------------
+          """
+          sh """
+            git add .
+            git commit -m "Release ${VERSION}"
+          """
+        }
+      }
+    }
+
+    stage('Compile') {
+      steps {
+        setGitHubBuildStatus('platform/compile', 'Compile', 'PENDING')
+        container('maven') {
+          echo """
+          ----------------------------------------
+          Compile
+          ----------------------------------------"""
+          echo "MAVEN_OPTS=$MAVEN_OPTS"
+          sh "mvn ${MAVEN_ARGS} -V -T0.8C -DskipTests install"
+        }
+      }
+      post {
+        success {
+          setGitHubBuildStatus('platform/compile', 'Compile', 'SUCCESS')
+        }
+        failure {
+          setGitHubBuildStatus('platform/compile', 'Compile', 'FAILURE')
+        }
+      }
+    }
+
+    stage('Package') {
+      steps {
+        setGitHubBuildStatus('platform/package', 'Package', 'PENDING')
+        container('maven') {
+          echo """
+          ----------------------------------------
+          Package
+          ----------------------------------------"""
+          sh "mvn ${MAVEN_ARGS} -f nuxeo-distribution/pom.xml -DskipTests install"
+          sh "mvn ${MAVEN_ARGS} -f packages/pom.xml -DskipTests install"
+        }
+      }
+      post {
+        success {
+          setGitHubBuildStatus('platform/package', 'Package', 'SUCCESS')
+        }
+        failure {
+          setGitHubBuildStatus('platform/package', 'Package', 'FAILURE')
+        }
+      }
+    }
+
+    stage('Build Docker images') {
+      steps {
+        setGitHubBuildStatus('platform/docker/build', 'Build Docker images', 'PENDING')
+        container('maven') {
+          echo """
+          ----------------------------------------
+          Build Docker images
+          ----------------------------------------
+          Image tag: ${VERSION}
+          """
+          echo "Build and push Docker images to internal Docker registry ${DOCKER_REGISTRY}"
+          // Fetch Nuxeo distribution and Nuxeo Content Platform packages with Maven
+          sh "mvn ${MAVEN_ARGS} -f docker/pom.xml process-resources"
+          skaffoldBuildAll()
+        }
+      }
+      post {
+        success {
+          setGitHubBuildStatus('platform/docker/build', 'Build Docker images', 'SUCCESS')
+        }
+        failure {
+          setGitHubBuildStatus('platform/docker/build', 'Build Docker images', 'FAILURE')
+        }
+      }
+    }
+
+    stage('Deploy Docker images') {
+      steps {
+        setGitHubBuildStatus('platform/docker/deploy', 'Deploy Docker images', 'PENDING')
+        container('maven') {
+          echo """
+          ----------------------------------------
+          Deploy Docker images
+          ----------------------------------------
+          Image tag: ${VERSION}
+          """
+          echo "Push Docker images to public Docker registry ${PUBLIC_DOCKER_REGISTRY}"
+          dockerDeploy("${SLIM_IMAGE_NAME}")
+          dockerDeploy("${NUXEO_IMAGE_NAME}")
+        }
+      }
+      post {
+        success {
+          setGitHubBuildStatus('platform/docker/deploy', 'Deploy Docker images', 'SUCCESS')
+        }
+        failure {
+          setGitHubBuildStatus('platform/docker/deploy', 'Deploy Docker images', 'FAILURE')
+        }
+      }
+    }
+
+    stage('Deploy Maven artifacts') {
+      steps {
+        setGitHubBuildStatus('platform/deploy', 'Deploy Maven artifacts', 'PENDING')
+        container('maven') {
+          echo """
+          ----------------------------------------
+          Deploy Maven artifacts
+          ----------------------------------------"""
+          sh "mvn ${MAVEN_ARGS} -Pdistrib -DskipTests deploy"
+        }
+      }
+      post {
+        success {
+          setGitHubBuildStatus('platform/deploy', 'Deploy Maven artifacts', 'SUCCESS')
+        }
+        failure {
+          setGitHubBuildStatus('platform/deploy', 'Deploy Maven artifacts', 'FAILURE')
+        }
+      }
+    }
+
+    stage('Git tag and push') {
+      steps {
+        container('maven') {
+          echo """
+          ----------------------------------------
+          Git tag and push
+          ----------------------------------------
+          """
+          sh """
+            #!/usr/bin/env bash -xe
+            # create the Git credentials
+            jx step git credentials
+            git config credential.helper store
+            # Git tag
+            jx step tag -v ${VERSION}
+          """
+        }
+      }
+    }
+
     stage('Deploy Preview') {
       steps {
         setGitHubBuildStatus('nuxeo/preview/deploy', 'Deploy nuxeo Preview', 'PENDING')
