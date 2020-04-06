@@ -30,7 +30,7 @@ import org.nuxeo.ecm.core.repository.RepositoryService;
 import org.nuxeo.ecm.core.storage.sql.RepositoryDescriptor;
 import org.nuxeo.ecm.core.storage.sql.RepositoryImpl;
 import org.nuxeo.ecm.core.storage.sql.RepositoryManagement;
-import org.nuxeo.ecm.core.storage.sql.ra.PoolingRepositoryFactory;
+import org.nuxeo.ecm.core.storage.sql.VCSRepositoryFactory;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.model.ComponentContext;
 import org.nuxeo.runtime.model.ComponentInstance;
@@ -136,7 +136,7 @@ public class SQLRepositoryService extends DefaultComponent {
         }
         // extract label, isDefault
         // and pass it to high-level registry
-        RepositoryFactory repositoryFactory = new PoolingRepositoryFactory(repositoryName);
+        RepositoryFactory repositoryFactory = new VCSRepositoryFactory(repositoryName);
         Repository repository = new Repository(repositoryName, descriptor.label, descriptor.isDefault(),
                 repositoryFactory);
         repositoryManager.addRepository(repository);

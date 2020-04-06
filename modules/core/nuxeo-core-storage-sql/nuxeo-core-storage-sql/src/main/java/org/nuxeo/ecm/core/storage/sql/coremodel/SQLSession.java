@@ -36,7 +36,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import javax.resource.ResourceException;
+import javax.transaction.xa.XAException;
+import javax.transaction.xa.XAResource;
+import javax.transaction.xa.Xid;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -66,6 +68,7 @@ import org.nuxeo.ecm.core.schema.SchemaManager;
 import org.nuxeo.ecm.core.storage.sql.ACLRow;
 import org.nuxeo.ecm.core.storage.sql.Model;
 import org.nuxeo.ecm.core.storage.sql.Node;
+import org.nuxeo.ecm.core.storage.sql.SessionImpl;
 import org.nuxeo.runtime.api.Framework;
 
 /**
@@ -96,7 +99,7 @@ public class SQLSession implements Session<QueryFilter> {
 
     private final Repository repository;
 
-    private final org.nuxeo.ecm.core.storage.sql.Session session;
+    private final SessionImpl session;
 
     private Document root;
 
@@ -104,7 +107,7 @@ public class SQLSession implements Session<QueryFilter> {
 
     private final boolean copyFindFreeNameDisabled;
 
-    public SQLSession(org.nuxeo.ecm.core.storage.sql.Session session, Repository repository) {
+    public SQLSession(SessionImpl session, Repository repository) {
         this.session = session;
         this.repository = repository;
         Node rootNode = session.getRootNode();
@@ -128,26 +131,14 @@ public class SQLSession implements Session<QueryFilter> {
     }
 
     @Override
-    public void close() {
+    public void destroy() {
+        session.close();
         root = null;
-        try {
-            session.close();
-        } catch (ResourceException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
     public void save() {
         session.save();
-    }
-
-    @Override
-    public boolean isLive() {
-        // session can become non-live behind our back
-        // through ConnectionAwareXAResource that closes
-        // all handles (sessions) at tx end() time
-        return session != null && session.isLive();
     }
 
     @Override
@@ -957,6 +948,65 @@ public class SQLSession implements Session<QueryFilter> {
 
     public void markUserChange(Serializable id) {
         session.markUserChange(id);
+    }
+
+    /*
+     * ----- Transaction / XAResource -----
+     */
+
+    @Override
+    public void beforeCompletion() {
+        session.beforeCompletion();
+    }
+
+    @Override
+    public void start(Xid xid, int flags) throws XAException {
+        session.start(xid, flags);
+    }
+
+    @Override
+    public int prepare(Xid xid) throws XAException {
+        return session.prepare(xid);
+    }
+
+    @Override
+    public void commit(Xid xid, boolean onePhase) throws XAException {
+        session.commit(xid, onePhase);
+    }
+
+    @Override
+    public void rollback(Xid xid) throws XAException {
+        session.rollback(xid);
+    }
+
+    @Override
+    public void end(Xid xid, int flags) throws XAException {
+        session.end(xid, flags);
+    }
+
+    @Override
+    public boolean isSameRM(XAResource xaRes) throws XAException {
+        return xaRes == this;
+    }
+
+    @Override
+    public void forget(Xid xid) throws XAException {
+        session.forget(xid);
+    }
+
+    @Override
+    public Xid[] recover(int flag) throws XAException {
+        return session.recover(flag);
+    }
+
+    @Override
+    public boolean setTransactionTimeout(int seconds) throws XAException {
+        return session.setTransactionTimeout(seconds);
+    }
+
+    @Override
+    public int getTransactionTimeout() throws XAException {
+        return session.getTransactionTimeout();
     }
 
 }
