@@ -41,6 +41,7 @@ import org.nuxeo.ecm.core.scroll.DocumentScrollRequest;
 import org.nuxeo.lib.stream.computation.Record;
 import org.nuxeo.lib.stream.log.LogAppender;
 import org.nuxeo.lib.stream.log.LogManager;
+import org.nuxeo.lib.stream.log.Name;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.codec.CodecService;
 import org.nuxeo.runtime.kv.KeyValueService;
@@ -63,9 +64,15 @@ public class BulkServiceImpl implements BulkService {
 
     public static final String COMMAND_STREAM = "command";
 
+    public static final Name COMMAND_STREAM_NAME = Name.ofUrn(COMMAND_STREAM);
+
     public static final String STATUS_STREAM = "status";
 
+    public static final Name STATUS_STREAM_NAME = Name.ofUrn(STATUS_STREAM);
+
     public static final String DONE_STREAM = "done";
+
+    public static final Name DONE_STREAM_NAME = Name.ofUrn(DONE_STREAM);
 
     public static final String RECORD_CODEC = "avro";
 
@@ -149,7 +156,7 @@ public class BulkServiceImpl implements BulkService {
     @SuppressWarnings("resource") // LogManager not ours to close
     protected String submit(String shardKey, String key, byte[] bytes) {
         LogManager logManager = Framework.getService(StreamService.class).getLogManager(BULK_LOG_MANAGER_NAME);
-        LogAppender<Record> logAppender = logManager.getAppender(COMMAND_STREAM,
+        LogAppender<Record> logAppender = logManager.getAppender(COMMAND_STREAM_NAME,
                 Framework.getService(CodecService.class).getCodec(RECORD_CODEC, Record.class));
         logAppender.append(shardKey, Record.of(key, bytes));
         return key;
@@ -220,7 +227,7 @@ public class BulkServiceImpl implements BulkService {
     @SuppressWarnings("resource") // LogManager not ours to close
     protected void abort(String key, byte[] bytes) {
         LogManager logManager = Framework.getService(StreamService.class).getLogManager(BULK_LOG_MANAGER_NAME);
-        LogAppender<Record> logAppender = logManager.getAppender(STATUS_STREAM);
+        LogAppender<Record> logAppender = logManager.getAppender(STATUS_STREAM_NAME);
         logAppender.append(key, Record.of(key, bytes));
     }
 
