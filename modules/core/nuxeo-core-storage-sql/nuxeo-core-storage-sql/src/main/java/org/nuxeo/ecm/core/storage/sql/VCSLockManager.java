@@ -85,7 +85,7 @@ public class VCSLockManager implements LockManager {
     public VCSLockManager(RepositoryImpl repository) {
         repositoryName = repository.getName();
         model = repository.getModel();
-        sqlInfo = repository.getBackend().getSQLInfo();
+        sqlInfo = repository.getSQLInfo();
         String cacheName = repositoryName + "/locks";
         lockCache = getCache(cacheName);
         connection = runWithoutTransaction(this::openConnection);

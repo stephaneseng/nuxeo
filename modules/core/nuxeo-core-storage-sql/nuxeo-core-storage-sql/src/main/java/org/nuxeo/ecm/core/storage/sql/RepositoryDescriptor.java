@@ -174,9 +174,6 @@ public class RepositoryDescriptor {
         this.pool = pool;
     }
 
-    @XNode("backendClass")
-    public Class<? extends RepositoryBackend> backendClass;
-
     @XNode("clusterInvalidatorClass")
     public Class<? extends VCSClusterInvalidator> clusterInvalidatorClass;
 
@@ -401,7 +398,6 @@ public class RepositoryDescriptor {
         label = other.label;
         isDefault = other.isDefault;
         pool = other.pool == null ? null : new NuxeoConnectionManagerConfiguration(other.pool);
-        backendClass = other.backendClass;
         clusterInvalidatorClass = other.clusterInvalidatorClass;
         cachingMapperClass = other.cachingMapperClass;
         cachingMapperEnabled = other.cachingMapperEnabled;
@@ -444,9 +440,6 @@ public class RepositoryDescriptor {
             } else {
                 pool.merge(other.pool);
             }
-        }
-        if (other.backendClass != null) {
-            backendClass = other.backendClass;
         }
         if (other.clusterInvalidatorClass != null) {
             clusterInvalidatorClass = other.clusterInvalidatorClass;
