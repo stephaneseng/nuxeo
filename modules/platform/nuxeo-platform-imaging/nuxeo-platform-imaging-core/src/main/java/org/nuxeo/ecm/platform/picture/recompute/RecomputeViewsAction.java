@@ -57,13 +57,15 @@ public class RecomputeViewsAction implements StreamProcessorTopology {
 
     public static final String ACTION_NAME = "recomputeViews";
 
+    public static final String ACTION_FULL_NAME = "bulk/" + ACTION_NAME;
+
     public static final String PARAM_XPATH = "xpath";
 
     @Override
     public Topology getTopology(Map<String, String> options) {
         return Topology.builder()
                 .addComputation(RecomputeViewsComputation::new, //
-                        Arrays.asList(INPUT_1 + ":" + ACTION_NAME, OUTPUT_1 + ":" + STATUS_STREAM))
+                        Arrays.asList(INPUT_1 + ":" + ACTION_FULL_NAME, OUTPUT_1 + ":" + STATUS_STREAM))
                 .build();
     }
 
@@ -74,7 +76,7 @@ public class RecomputeViewsAction implements StreamProcessorTopology {
         protected String xpath;
 
         public RecomputeViewsComputation() {
-            super(ACTION_NAME);
+            super(ACTION_FULL_NAME);
         }
 
         @Override
