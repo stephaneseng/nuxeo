@@ -142,6 +142,9 @@ function run(baseURL = '/nuxeo', username = null, password = null) {
       for (var k in cv.searchDocument.properties) {
         var v = cv.searchDocument.properties[k];
         // skip empty values
+        if ( v == null || v === undefined ) {
+          continue;
+        }
         if ((typeof(v.length) !== 'undefined') && (v.length === 0)) {
           continue;
         }
