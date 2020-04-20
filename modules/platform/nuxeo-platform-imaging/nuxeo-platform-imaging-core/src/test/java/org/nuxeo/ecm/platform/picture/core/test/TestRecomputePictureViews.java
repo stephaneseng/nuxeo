@@ -31,6 +31,8 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.common.utils.FileUtils;
@@ -60,6 +62,8 @@ import org.nuxeo.runtime.test.runner.TransactionalFeature;
 @Deploy("org.nuxeo.ecm.platform.picture.convert")
 public class TestRecomputePictureViews {
 
+    private static final Logger log = LogManager.getLogger(TestRecomputePictureViews.class);
+
     @Inject
     protected CoreSession session;
 
@@ -79,9 +83,13 @@ public class TestRecomputePictureViews {
         doc = session.createDocument(doc);
 
         // wait for picture views generation
+        log.trace("Before next transaction");
         txFeature.nextTransaction();
+        log.trace("After next transaction");
         doc = session.getDocument(doc.getRef());
+        log.trace("Document: {}", doc);
         List<Serializable> pictureViews = (List<Serializable>) doc.getPropertyValue("picture:views");
+        log.trace("Picture views: {}", pictureViews);
         assertNotNull(pictureViews);
         assertFalse(pictureViews.isEmpty());
 

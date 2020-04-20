@@ -291,6 +291,9 @@ public class ChronicleLogAppender<M extends Externalizable> implements Closeable
 
     @Override
     public LogOffset append(int partition, M message) {
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("append to partition: %s, message: %s", partition, message));
+        }
         ExcerptAppender appender = partitions.get(partition).acquireAppender();
         try {
             if (NO_CODEC.equals(codec)) {
