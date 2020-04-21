@@ -87,7 +87,9 @@
           </div>
         </#if>
         <#if onArtifact??>
-          <@googleSearchFrame This.searchCriterion />
+          <@block name="googleSearchFrame">
+            <@googleSearchFrame This.searchCriterion />
+          </@block>
         </#if>
         <@block name="right">
           Content
