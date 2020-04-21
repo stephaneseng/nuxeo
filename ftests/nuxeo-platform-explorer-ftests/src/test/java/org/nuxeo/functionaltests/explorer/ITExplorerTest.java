@@ -24,6 +24,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.nuxeo.functionaltests.AbstractTest;
+import org.nuxeo.functionaltests.Locator;
 import org.nuxeo.functionaltests.RestHelper;
 import org.nuxeo.functionaltests.explorer.pages.ArtifactHomePage;
 import org.nuxeo.functionaltests.explorer.pages.ArtifactPage;
@@ -106,7 +107,7 @@ public class ITExplorerTest extends AbstractTest {
         assertEquals("ActionService", elt.findElement(By.xpath(".//span[@title='Component Label']")).getText());
         assertEquals("org.nuxeo.ecm.platform.actions.ActionService",
                 elt.findElement(By.xpath(".//span[@title='Component ID']")).getText());
-        link.click();
+        Locator.scrollAndForceClick(link);;
         ArtifactPage apage = asPage(ArtifactPage.class);
         assertTrue(apage.isSelected(apage.extensionPoints));
         assertEquals("Extension point org.nuxeo.ecm.platform.actions.ActionService--actions", apage.getTitle());
@@ -128,7 +129,7 @@ public class ITExplorerTest extends AbstractTest {
         assertEquals("configuration", elt.findElement(By.xpath(".//span[@title='Target Extension Point']")).getText());
         assertEquals("org.nuxeo.runtime.cluster.ClusterService",
                 elt.findElement(By.xpath(".//span[@title='Target Component Name']")).getText());
-        link.click();
+        Locator.scrollAndForceClick(link);;
         ArtifactPage apage = asPage(ArtifactPage.class);
         assertTrue(apage.isSelected(apage.contributions));
         assertEquals("Contribution cluster-config--configuration", apage.getTitle());
@@ -148,7 +149,7 @@ public class ITExplorerTest extends AbstractTest {
         assertEquals("ActionManager", link.getText());
         assertEquals("org.nuxeo.ecm.platform.actions.ejb.ActionManager",
                 elt.findElement(By.xpath(".//span[@title='Service Name']")).getText());
-        link.click();
+        Locator.scrollAndForceClick(link);;
         ArtifactPage apage = asPage(ArtifactPage.class);
         assertTrue(apage.isSelected(apage.services));
         assertEquals("Service org.nuxeo.ecm.platform.actions.ejb.ActionManager", apage.getTitle());
@@ -169,7 +170,7 @@ public class ITExplorerTest extends AbstractTest {
         assertEquals("acceptComment", link.getText());
         assertEquals("CHAIN", elt.findElement(By.xpath(".//span[@title='Category']")).getText());
         assertEquals("acceptComment", elt.findElement(By.xpath(".//span[@title='Operation ID']")).getText());
-        link.click();
+        Locator.scrollAndForceClick(link);;
         ArtifactPage apage = asPage(ArtifactPage.class);
         assertTrue(apage.isSelected(apage.operations));
         assertEquals("Operation acceptComment", apage.getTitle());
@@ -191,7 +192,7 @@ public class ITExplorerTest extends AbstractTest {
         assertEquals("JAVA", elt.findElement(By.xpath(".//span[@title='Component Type']")).getText());
         assertEquals("org.nuxeo.ecm.platform.actions.ActionService",
                 elt.findElement(By.xpath(".//span[@title='Component ID']")).getText());
-        link.click();
+        Locator.scrollAndForceClick(link);;
         ArtifactPage apage = asPage(ArtifactPage.class);
         assertTrue(apage.isSelected(apage.components));
         assertEquals("Component org.nuxeo.ecm.platform.actions.ActionService", apage.getTitle());
@@ -210,7 +211,7 @@ public class ITExplorerTest extends AbstractTest {
         WebElement elt = ahome.getFirstListingElement();
         WebElement link = elt.findElement(By.xpath(".//a"));
         assertEquals("org.nuxeo.admin.center", link.getText());
-        link.click();
+        Locator.scrollAndForceClick(link);;
         ArtifactPage apage = asPage(ArtifactPage.class);
         assertTrue(apage.isSelected(apage.bundles));
         assertEquals("Bundle org.nuxeo.admin.center", apage.getTitle());

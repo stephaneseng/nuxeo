@@ -18,6 +18,7 @@
  */
 package org.nuxeo.functionaltests.explorer.pages;
 
+import org.nuxeo.functionaltests.Locator;
 import org.nuxeo.functionaltests.Required;
 import org.nuxeo.functionaltests.pages.AbstractPage;
 import org.openqa.selenium.WebDriver;
@@ -42,7 +43,7 @@ public abstract class AbstractExplorerPage extends AbstractPage {
     }
 
     public ArtifactHomePage navigateTo(WebElement element) {
-        element.click();
+        Locator.scrollAndForceClick(element);
         return asPage(ArtifactHomePage.class);
     }
 
