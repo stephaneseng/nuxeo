@@ -125,4 +125,6 @@ public class ITExplorerTest extends AbstractExplorerTest {
         checkBundles();
     }
 
+    // TODO: test override mechanism
+
 }
