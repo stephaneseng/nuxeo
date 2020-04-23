@@ -27,7 +27,6 @@ public abstract class BaseNuxeoArtifact implements NuxeoArtifact {
 
     @Override
     public AssociatedDocumentsImpl getAssociatedDocuments(CoreSession session) {
-
         if (associatedDocuments == null) {
             associatedDocuments = new AssociatedDocumentsImpl(this, session);
         }

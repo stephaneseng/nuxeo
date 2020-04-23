@@ -170,7 +170,13 @@ public class AssociatedDocumentsImpl implements AssociatedDocuments {
 
             @Override
             public String getContent() {
-                String content = liveDoc.get(DefaultDocumentationType.DESCRIPTION.getValue()).getContent();
+                String content = null;
+                if (liveDoc != null) {
+                    ResourceDocumentationItem item = liveDoc.get(DefaultDocumentationType.DESCRIPTION.getValue());
+                    if (item != null) {
+                        content = item.getContent();
+                    }
+                }
                 if (content == null) {
                     content = "";
                 }
