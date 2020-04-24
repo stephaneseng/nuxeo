@@ -65,6 +65,7 @@ import org.nuxeo.ecm.core.io.impl.plugins.DocumentModelWriter;
 import org.nuxeo.ecm.core.io.impl.plugins.DocumentTreeReader;
 import org.nuxeo.ecm.core.io.impl.plugins.NuxeoArchiveReader;
 import org.nuxeo.ecm.core.io.impl.plugins.NuxeoArchiveWriter;
+import org.nuxeo.ecm.platform.thumbnail.ThumbnailConstants;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.model.ComponentContext;
 import org.nuxeo.runtime.model.DefaultComponent;
@@ -291,6 +292,7 @@ public class SnapshotManagerComponent extends DefaultComponent implements Snapsh
             snapDoc.setPropertyValue("nxdistribution:version", version);
             snapDoc.setPropertyValue("nxdistribution:key", name + "-" + version);
             snapDoc.setPropertyValue(NuxeoArtifact.TITLE_PROPERTY_PATH, title);
+            snapDoc.getContextData().put(ThumbnailConstants.DISABLE_THUMBNAIL_COMPUTATION, true);
             snapDoc = session.saveDocument(snapDoc);
 
             DocumentModel targetContainer = session.getParentDocument(tmp.getRef());

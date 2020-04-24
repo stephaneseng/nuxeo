@@ -53,6 +53,7 @@ import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.PropertyException;
 import org.nuxeo.ecm.core.query.sql.NXQL;
+import org.nuxeo.ecm.platform.thumbnail.ThumbnailConstants;
 import org.nuxeo.runtime.api.Framework;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -97,6 +98,7 @@ public class RepositoryDistributionSnapshot extends BaseNuxeoArtifactDocAdapter 
         doc.setPropertyValue(PROP_VERSION, distrib.getVersion());
 
         DocumentModel ret;
+        doc.getContextData().put(ThumbnailConstants.DISABLE_THUMBNAIL_COMPUTATION, true);
         if (exist) {
             ret = session.saveDocument(doc);
         } else {
