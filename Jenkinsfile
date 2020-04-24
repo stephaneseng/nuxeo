@@ -29,7 +29,6 @@ testEnvironments= [
 properties([
   [$class: 'GithubProjectProperty', projectUrlStr: repositoryUrl],
   [$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', daysToKeepStr: '60', numToKeepStr: '60', artifactNumToKeepStr: '5']],
-  disableConcurrentBuilds(),
 ])
 
 void setGitHubBuildStatus(String context, String message, String state) {
