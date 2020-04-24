@@ -40,6 +40,7 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.PropertyException;
+import org.nuxeo.ecm.platform.thumbnail.ThumbnailConstants;
 
 public class ComponentInfoDocAdapter extends BaseNuxeoArtifactDocAdapter implements ComponentInfo {
 
@@ -72,6 +73,7 @@ public class ComponentInfoDocAdapter extends BaseNuxeoArtifactDocAdapter impleme
                 componentInfo.getXmlFileName());
         doc.setPropertyValue(NuxeoArtifact.CONTENT_PROPERTY_PATH, (Serializable) xmlBlob);
 
+        doc.getContextData().put(ThumbnailConstants.DISABLE_THUMBNAIL_COMPUTATION, true);
         if (exist) {
             doc = session.saveDocument(doc);
         } else {
