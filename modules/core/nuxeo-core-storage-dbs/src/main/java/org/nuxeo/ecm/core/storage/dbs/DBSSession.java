@@ -182,8 +182,6 @@ public class DBSSession implements Session<QueryFilter> {
 
     protected final DBSRepository repository;
 
-    protected final Runnable closeCallback;
-
     protected final DBSTransactionState transaction;
 
     protected final boolean fulltextStoredInBlob;
@@ -204,9 +202,8 @@ public class DBSSession implements Session<QueryFilter> {
 
     protected boolean isLatestVersionDisabled = false;
 
-    public DBSSession(DBSRepository repository, Runnable closeCallback) {
+    public DBSSession(DBSRepository repository) {
         this.repository = repository;
-        this.closeCallback = closeCallback;
         transaction = new DBSTransactionState(repository, this);
         FulltextConfiguration fulltextConfiguration = repository.getFulltextConfiguration();
         fulltextStoredInBlob = fulltextConfiguration != null && fulltextConfiguration.fulltextStoredInBlob;
@@ -229,7 +226,6 @@ public class DBSSession implements Session<QueryFilter> {
     @Override
     public void destroy() {
         transaction.close();
-        closeCallback.run();
     }
 
     @SuppressWarnings("resource") // timerContext closed by stop() in finally
