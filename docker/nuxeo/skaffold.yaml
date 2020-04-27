@@ -24,9 +24,6 @@ build:
         dockerfile: Dockerfile
         buildContext:
           localDir: {}
-        buildArgs:
-          BUILDER_IMAGE: ${DOCKER_REGISTRY}/nuxeo/builder:${VERSION}
-          BASE_IMAGE: ${DOCKER_REGISTRY}/nuxeo/base:${VERSION}
         cache:
           repo: ${DOCKER_REGISTRY}/nuxeo/nuxeo/cache
   cluster:
