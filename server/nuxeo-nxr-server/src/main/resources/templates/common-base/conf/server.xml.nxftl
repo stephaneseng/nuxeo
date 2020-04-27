@@ -81,15 +81,17 @@
                compression="on"
                compressionMinSize="512"
                compressibleMimeType="text/css,application/javascript,text/xml,text/html"
-               connectionTimeout="20000"
+               connectionTimeout="${nuxeo.server.http.connectionTimeout}"
                disableUploadTimeout="false"
-               connectionUploadTimeout="${nuxeo.server.http.connectionUploadTimeout}" />
+               connectionUploadTimeout="${nuxeo.server.http.connectionUploadTimeout}"
+               keepAliveTimeout="${nuxeo.server.http.keepAliveTimeout}" />
 
     <!-- A "Connector" using the shared thread pool-->
     <!--
     <Connector executor="tomcatThreadPool"
                port="8080" protocol="HTTP/1.1"
-               connectionTimeout="20000"
+               connectionTimeout="${nuxeo.server.http.connectionTimeout}"
+               keepAliveTimeout="${nuxeo.server.http.keepAliveTimeout}"
                redirectPort="8443" />
     -->
 <#if nuxeo.server.https.port != "0">
@@ -135,9 +137,10 @@
                compression="on"
                compressionMinSize="512"
                compressibleMimeType="text/css,application/javascript,text/xml,text/html"
-               connectionTimeout="20000"
+               connectionTimeout="${nuxeo.server.http.connectionTimeout}"
                disableUploadTimeout="false"
-               connectionUploadTimeout="${nuxeo.server.http.connectionUploadTimeout}" />
+               connectionUploadTimeout="${nuxeo.server.http.connectionUploadTimeout}"
+               keepAliveTimeout="${nuxeo.server.http.keepAliveTimeout}" />
 </#if>
 
 
