@@ -121,9 +121,6 @@ public class JtajcaManagementFeature implements RunnerFeature {
             return;
         }
         runner.getFeature(RuntimeFeature.class).registerHandler(new JtajcaDeployer(runner));
-        // bind repository
-        String repositoryName = core.getStorageConfiguration().getRepositoryName();
-        NuxeoContainer.getConnectionManager(repositoryName);
 
         MBeanServer mbs = Framework.getService(ServerLocator.class).lookupServer();
         bind(binder, mbs, ConnectionPoolMonitor.class);

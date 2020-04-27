@@ -10,8 +10,6 @@
       minPoolSize="${nuxeo.db["min-pool-size"]}"
       blockingTimeoutMillis="${nuxeo.db["blocking-timeout-millis"]}"
       idleTimeoutMinutes="${nuxeo.db["idle-timeout-minutes"]}"
-      activeTimeoutMinutes="${nuxeo.db["active-timeout-minutes"]}"
-      sqlExceptionSorter="${nuxeo.db["sql-exception-sorter"]}"
       validationQuery="${nuxeo.db.validationQuery}"
       accessToUnderlyingConnectionAllowed="true" />
 <#else>
@@ -20,8 +18,6 @@
       minPoolSize="${nuxeo.db["min-pool-size"]}"
       blockingTimeoutMillis="${nuxeo.db["blocking-timeout-millis"]}"
       idleTimeoutMinutes="${nuxeo.db["idle-timeout-minutes"]}"
-      activeTimeoutMinutes="${nuxeo.db["active-timeout-minutes"]}"
-      sqlExceptionSorter="${nuxeo.db["sql-exception-sorter"]}"
       validationQuery="${nuxeo.db.validationQuery}"
       accessToUnderlyingConnectionAllowed="true" >
 <#include "xadatasource-params.ftl" parse=true />
